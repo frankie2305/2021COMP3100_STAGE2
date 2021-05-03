@@ -9,7 +9,6 @@ public class DSClient {
     private static final String QUIT = "QUIT";
     private static final String REDY = "REDY";
     private static final String DATA = "DATA";
-    private static final String JOBN = "JOBN";
     private static final String NONE = "NONE";
     private static final String GETS_CAPACLE = "GETS Capable";
     private static final String SCHD = "SCHD";
@@ -67,11 +66,9 @@ public class DSClient {
                     if (response.equals(NONE)) {
                         request = QUIT;
                     } else {
-                        String[] specs = response.split("\\s+");
+                        job = Parser.parseJob(response);
 
-                        if (specs[0].equals(JOBN)) {
-                            job = Parser.parseJob(specs);
-
+                        if (job != null) {
                             request = GETS_CAPACLE + " " + job.getCore() + " " + job.getMemory() + " " + job.getDisk();
                         }
                     }
@@ -98,9 +95,7 @@ public class DSClient {
                         request = SCHD + " " + job.getId() + " " + server.getType() + " " + server.getId();
                     } else {
                         if (counter == 0) {
-                            String[] specs = response.split("\\s+");
-
-                            server = Parser.parseServer(specs);
+                            server = Parser.parseServer(response);
                         }
                         counter++;
                         if (counter < nRecs) {
