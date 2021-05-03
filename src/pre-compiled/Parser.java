@@ -4,20 +4,28 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 public class Parser {
-    public static Job parseJob(String[] specs) {
+    public static Job parseJob(String response) {
         Job job = null;
+
         try {
-            job = new Job(Integer.parseInt(specs[1]), Integer.parseInt(specs[2]), Integer.parseInt(specs[3]),
-                    Integer.parseInt(specs[4]), Integer.parseInt(specs[5]), Integer.parseInt(specs[6]));
+            String[] specs = response.split("\\s+");
+
+            if (specs[0].equals("JOBN")) {
+                job = new Job(Integer.parseInt(specs[1]), Integer.parseInt(specs[2]), Integer.parseInt(specs[3]),
+                        Integer.parseInt(specs[4]), Integer.parseInt(specs[5]), Integer.parseInt(specs[6]));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return job;
     }
 
-    public static Server parseServer(String[] specs) {
+    public static Server parseServer(String response) {
         Server server = null;
+
         try {
+            String[] specs = response.split("\\s+");
+
             server = new Server(specs[0], Integer.parseInt(specs[1]), specs[2], Integer.parseInt(specs[3]),
                     Integer.parseInt(specs[4]), Integer.parseInt(specs[5]), Integer.parseInt(specs[6]),
                     Integer.parseInt(specs[7]), Integer.parseInt(specs[8]));
