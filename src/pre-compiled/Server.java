@@ -1,4 +1,5 @@
 public class Server {
+    // all server attributes (both from ds-system.xml and server)
 	private int id;
 	private String type;
 	private int limit;
@@ -12,6 +13,7 @@ public class Server {
     private int waitingJobs;
     private int runningJobs;
 
+    // constructor for an XML server in ds-system.xml
 	public Server(String t, int l, int bt, float hr, int c, int m, int d) {
 		type = t;
 		limit = l;
@@ -22,6 +24,7 @@ public class Server {
 		disk = d;
 	}
 
+    // constructor for a server received from server
 	public Server(String t, int i, String s, int cst, int c, int m, int d, int wj, int rj) {
 		type = t;
 		id = i;
@@ -34,6 +37,7 @@ public class Server {
         runningJobs = rj;
 	}
 
+    // getter methods
     public int getId() {
         return id;
     }

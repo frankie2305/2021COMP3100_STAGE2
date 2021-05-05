@@ -1,4 +1,5 @@
 public class Job {
+    // all job attributes from server
     private int submitTime;
     private int id;
     private int estRuntime;
@@ -6,6 +7,7 @@ public class Job {
     private int memory;
     private int disk;
 
+    // constructor for a job received from server
     public Job(int s, int i, int e, int c, int m, int d) {
         submitTime = s;
         id = i;
@@ -15,6 +17,7 @@ public class Job {
         disk = d;
     }
 
+    // getter methods
     public int getSubmitTime() {
         return submitTime;
     }
