@@ -1,3 +1,4 @@
+import java.util.*;
 import java.net.*;
 import java.io.*;
 
@@ -19,6 +20,8 @@ public class DSClient {
     private static Socket s = null;
     private static BufferedReader in = null;
     private static DataOutputStream out = null;
+
+    private static final ArrayList<Server> xmlServers = Parser.parseXMLServers();
 
     private static void send(String request) {
         try {
@@ -43,6 +46,7 @@ public class DSClient {
 
             Job job = null;
             Server server = null;
+            ArrayList<Server> servers = new ArrayList<Server>();
 
             while (true) {
                 String response = in.readLine();
@@ -90,14 +94,18 @@ public class DSClient {
 
                 if (request.equals(OK)) {
                     if (response.equals(DOT)) {
+                        server = Scheduler.allToCheapest(servers, xmlServers);
+
+                        servers.clear();
+
                         counter = 0;
 
                         request = SCHD + " " + job.getId() + " " + server.getType() + " " + server.getId();
                     } else {
-                        if (counter == 0) {
-                            server = Parser.parseServer(response);
-                        }
+                        servers.add(Parser.parseServer(response));
+
                         counter++;
+
                         if (counter < nRecs) {
                             continue;
                         }
