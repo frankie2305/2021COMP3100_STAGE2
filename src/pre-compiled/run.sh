@@ -9,6 +9,10 @@ if [ $# -lt 2 ]; then
     exit
 fi
 
+rm *.log
+
+javac Job.java Server.java Parser.java Scheduler.java DSClient.java
+
 while getopts "c:" opt;
 do
     case ${opt} in
@@ -26,30 +30,48 @@ trap "kill 0" EXIT
 for config in $configDir/*.xml; do
 	echo "$config"
 	sleep 2
-	./ds-server -c $config -v all > ff$i-all.log&
+	./ds-server -c $config -v all -n > ff$i-all.log&
 	sleep 4
-	./ds-client -a ff
+	./ds-client -a ff -n
 	sleep 2
-	./ds-server -c $config -v all > bf$i-all.log&
+	./ds-server -c $config -v all -n > bf$i-all.log&
 	sleep 4
-	./ds-client -a bf
+	./ds-client -a bf -n
 	sleep 2
-	./ds-server -c $config -v all > wf$i-all.log&
+	./ds-server -c $config -v all -n > wf$i-all.log&
 	sleep 4
-	./ds-client -a wf
+	./ds-client -a wf -n
 	sleep 2
-	./ds-server -c $config -v brief > ff$i-brief.log&
+	./ds-server -c $config -v all -n > my$i-all.log&
 	sleep 4
-	./ds-client -a ff
+	java DSClient
 	sleep 2
-	./ds-server -c $config -v brief > bf$i-brief.log&
+	./ds-server -c $config -v brief -n > ff$i-brief.log&
 	sleep 4
-	./ds-client -a bf
+	./ds-client -a ff -n
 	sleep 2
-	./ds-server -c $config -v brief > wf$i-brief.log&
+	./ds-server -c $config -v brief -n > bf$i-brief.log&
 	sleep 4
-	./ds-client -a wf
+	./ds-client -a bf -n
+	sleep 2
+	./ds-server -c $config -v brief -n > wf$i-brief.log&
+	sleep 4
+	./ds-client -a wf -n
+	sleep 2
+	./ds-server -c $config -v brief -n > my$i-brief.log&
+	sleep 4
+	java DSClient
 	sleep 2
 	((i++))
 	echo =============
 done
+
+rm *.class
+
+if [ -f ds-system.xml ]; then
+	rm ds-system.xml
+fi
+
+if [ -f ds-jobs.xml ]; then
+	rm ds-jobs.xml
+fi
